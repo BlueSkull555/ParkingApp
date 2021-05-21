@@ -39,7 +39,13 @@ export default function Auth({ user, setUser }) {
   const [phone, onChangePhone] = useState(null); // user phone number
   const [collegeId, onChangeCollegeId] = useState(null); // user college id
   const [gender, onChangeGender] = useState(null); // user gender
+
   //----------------------------------------------------------------------------
+
+  const [carSwtich, onChangeCarSwitch] = useState(false);
+  const [brand, onChangeBrand] = useState(null);
+  const [model, onChangeModel] = useState(null);
+  const [plateNo, onChangePlateNo] = useState(null);
 
   //--------------------(Button group)------------------------------------------
   const [selectedIndex, setSelectedIndex] = useState(1); // the element postion of the button arry
@@ -64,16 +70,12 @@ export default function Auth({ user, setUser }) {
   //--------------------(Handle register)------------------------------------------
   const handleRegister = () => {
     if (
-      email ||
-      password ||
-      name ||
-      age ||
-      phone ||
-      collegeId ||
-      gender === null
+      !(email || password || name || age || phone || collegeId || gender) ||
+      (Switch && (!brand || !plateNo || !model))
     ) {
       Alert.alert("Please fill all inputs");
-    } else {
+      console.log(email, password, name, age, phone, collegeId, gender);
+    } else if (Switch) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
@@ -83,12 +85,10 @@ export default function Auth({ user, setUser }) {
             age,
             email,
             phone,
-            location: null,
             collegeId,
             gender,
             role: "user",
-            car: null,
-            willCarPool: false,
+            car: { brand, plateNo, model },
           });
         })
         .catch((error) => {
@@ -99,7 +99,32 @@ export default function Auth({ user, setUser }) {
           if (error.code === "auth/invalid-email") {
             Alert.alert("That email address is invalid!");
           }
+          console.error(error);
+        });
+    } else {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          db.collection("users").doc(firebase.auth().currentUser.uid).set({
+            name,
+            age,
+            email,
+            phone,
+            collegeId,
+            gender,
+            role: "user",
+            car,
+          });
+        })
+        .catch((error) => {
+          if (error.code === "auth/email-already-in-use") {
+            Alert.alert("That email address is already in use!");
+          }
 
+          if (error.code === "auth/invalid-email") {
+            Alert.alert("That email address is invalid!");
+          }
           console.error(error);
         });
     }
@@ -135,6 +160,7 @@ export default function Auth({ user, setUser }) {
         <Card.Divider />
 
         {selectedIndex == 0 ? (
+          // Register screen -----------------------------------------------------------------------
           <View>
             <View style={{ flexWrap: "wrap", flexDirection: "row" }}>
               <Input
@@ -186,23 +212,62 @@ export default function Auth({ user, setUser }) {
               />
             </View>
             <View
-              style={{ justifyContent: "space-evenly", alignSelf: "center" }}
+              style={{ justifyContent: "space-around", flexDirection: "row" }}
             >
-              <Text
-                style={{ color: "grey", fontWeight: "bold", marginBottom: 5 }}
-              >
-                Select gender
-              </Text>
-              <RadioForm
-                radio_props={radio_props}
-                initial={null}
-                onPress={radioFlag}
-                formHorizontal={true}
-              />
+              <View>
+                <Text
+                  style={{ color: "grey", fontWeight: "bold", marginBottom: 5 }}
+                >
+                  Select gender
+                </Text>
+                <RadioForm
+                  radio_props={radio_props}
+                  initial={null}
+                  onPress={radioFlag}
+                  formHorizontal={true}
+                />
+              </View>
+              <View style={{}}>
+                <Text
+                  style={{ color: "grey", fontWeight: "bold", marginBottom: 5 }}
+                >
+                  You have a car?
+                </Text>
+                <Switch value={carSwtich} onValueChange={onChangeCarSwitch} />
+              </View>
             </View>
+            {carSwtich == true ? (
+              <View style={{ flexWrap: "wrap", flexDirection: "row" }}>
+                <Input
+                  containerStyle={{ width: "48%" }}
+                  onChangeText={onChangePlateNo}
+                  value={plateNo}
+                  placeholder="Enter your plate"
+                  keyboardType="number-pad"
+                  label="Plate number"
+                />
+                <Input
+                  containerStyle={{ width: "48%" }}
+                  onChangeText={onChangeBrand}
+                  value={brand}
+                  placeholder="Enter your brand"
+                  keyboardType="number-pad"
+                  label="Brand"
+                />
+                <Input
+                  containerStyle={{ width: "48%" }}
+                  onChangeText={onChangeModel}
+                  value={model}
+                  placeholder="Enter your model"
+                  keyboardType="number-pad"
+                  label="Model"
+                />
+              </View>
+            ) : null}
             <Button title="Register!" onPress={() => handleRegister()} />
           </View>
         ) : (
+          // Login screen ------------------------------------------------------------------------------------
           <View>
             <Input
               onChangeText={onChangeEmail}
