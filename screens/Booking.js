@@ -483,6 +483,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignContent: "center",
     backgroundColor: "#403D39",
+    alignSelf: "flex-start",
   },
   leftComponent: {
     justifyContent: "center",

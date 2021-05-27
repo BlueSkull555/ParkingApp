@@ -3,12 +3,11 @@ import React from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import Auth from "./screens/Auth";
+import Auth from "./screens/Auth/Auth";
 import Profile from "./screens/Profile";
 import CarPool from "./screens/CarPool";
-import Parking from "./screens/Parking";
-import Settings from "./screens/Settings";
 import Booking from "./screens/Booking";
+import Settings from "./screens/Settings";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { useState, useEffect } from "react";
@@ -26,10 +25,9 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Car Pool" component={CarPool} />
-        <Tab.Screen name="Parking" component={Parking} />
+        <Tab.Screen name="Parking" component={Booking} />
         <Tab.Screen name="Profile" component={Profile} />
         <Tab.Screen name="Settings" component={Settings} />
-        <Tab.Screen name="Booking" component={Booking} />
       </Tab.Navigator>
     </NavigationContainer>
   ) : (
