@@ -1,15 +1,23 @@
 module.exports = {
-  blue: "#648AA6",
-
-  black: "#252422",
+  black: {
+    dark: "#0B090A",
+    light: "#161A1D",
+  },
 
   gray: {
     dark: "#403D39",
-    light: "#CCC5B9",
+    silver: "#B1A7A6",
+    light: "#D3D3D3",
+    verylight: "#F5F3F4",
   },
 
-  white: "#FFFCF2",
-
+  white: "#FFFFFF",
+  red: {
+    dark: "#660708",
+    ruby: "#A4161A",
+    red: "#BA181B",
+    light: "#E5383B",
+  },
   validation: {
     error: "#B55B5B",
     succes: "#85BD6A",
