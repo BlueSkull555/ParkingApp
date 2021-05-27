@@ -287,7 +287,19 @@ export default function Register({ user, setUser }) {
             />
           ) : (
             <Button
-              buttonStyle={{ backgroundColor: Color.red.dark }}
+              disabled={
+                haveCar === false &&
+                email &&
+                password &&
+                name &&
+                age &&
+                phone &&
+                collegeId &&
+                gender
+                  ? false
+                  : true
+              }
+              buttonStyle={{ backgroundColor: Color.black.oliver }}
               title="Register"
               onPress={() => handleRegister()}
             />
@@ -353,11 +365,26 @@ export default function Register({ user, setUser }) {
               onPress={() => setViewFlag("first")}
             />
             <Button
+              disabled={
+                haveCar === true &&
+                email &&
+                password &&
+                name &&
+                age &&
+                phone &&
+                collegeId &&
+                gender &&
+                brand &&
+                plateNo &&
+                model
+                  ? false
+                  : true
+              }
               containerStyle={{
                 width: "48%",
               }}
-              buttonStyle={{ backgroundColor: Color.red.dark }}
-              title="Register!"
+              buttonStyle={{ backgroundColor: Color.black.oliver }}
+              title="Register"
               onPress={() => handleRegister()}
             />
           </View>

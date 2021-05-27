@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import Color, { black } from "../../Color";
+import Color, { black, gray } from "../../Color";
 import {
   StyleSheet,
   Text,
@@ -67,7 +67,8 @@ export default function Login({ user, setUser }) {
         labelStyle={styles.labelStyle}
       />
       <Button
-        buttonStyle={{ backgroundColor: Color.red.dark }}
+        disabled={password && email ? false : true}
+        buttonStyle={{ backgroundColor: Color.black.oliver }}
         title="login!"
         onPress={() => handleLogin()}
       />
