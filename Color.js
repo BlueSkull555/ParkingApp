@@ -1,5 +1,5 @@
 module.exports = {
-  orange: "#EE7444",
+  blue: "#648AA6",
 
   black: "#252422",
 
@@ -9,4 +9,9 @@ module.exports = {
   },
 
   white: "#FFFCF2",
+
+  validation: {
+    error: "#B55B5B",
+    succes: "#85BD6A",
+  },
 };

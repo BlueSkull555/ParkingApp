@@ -387,7 +387,6 @@ export default function Booking() {
                 </View>
               </View>
               <Text> Reservation Date: {details.startTime}</Text>
-
               <Text> Expires at: {details.expireDate}</Text>
             </View>
             <View style={{ flex: 1, justifyContent: "flex-end" }}>
@@ -404,8 +403,7 @@ export default function Booking() {
                     margin: 2,
                     paddingLeft: 20,
                     paddingRight: 20,
-                    color: "red",
-                    backgroundColor: "#EE7444",
+                    backgroundColor: "#B55B5B",
                   }}
                 />
                 {details.extended ? (
