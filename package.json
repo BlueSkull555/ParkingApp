@@ -21,6 +21,7 @@
     "react-native-elements": "^3.4.1",
     "react-native-maps": "^0.28.0",
     "react-native-paper": "^4.8.1",
+    "react-native-responsive-dimensions": "^3.1.1",
     "react-native-screens": "^3.2.0",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-web": "~0.13.12"
