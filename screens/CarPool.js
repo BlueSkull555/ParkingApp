@@ -1,28 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button, SafeAreaView, Alert } from 'react-native';
-import db from '../db';
-import { useState, useEffect } from 'react';
-import firebase from "firebase/app";
-import "firebase/auth";
+import React from "react";
+import { View, Text } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
+import CarpoolHome from "../components/CarpoolHome";
+import CarpoolMap from "../components/CarpoolMap";
+import FindARide from "../components/FindARide";
+import CarpoolChat from "../components/CarpoolChat";
+import CarpoolSettings from "../components/CarpoolSettings";
 
-export default function CarPool() {
-    return (
-        <View>
-            <Text>CarPool</Text>
-        </View>
-    )
-    
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 20,
-    margin: 10,
-  },
-});
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={CarpoolHome} />
+      <Stack.Screen name="Map" component={CarpoolMap} />
+      <Stack.Screen name="FindARide" component={FindARide} />
+      <Stack.Screen name="Chat" component={CarpoolChat} />
+      <Stack.Screen name="Settings" component={CarpoolSettings} />
+    </Stack.Navigator>
+  );
+}
