@@ -44,65 +44,89 @@ export default function CarpoolChat(props) {
 
   const keyboard = useKeyboard();
   const [text, setText] = useState("");
-  const [chat, setChat] = useState(null);
+  const [chats, setChats] = useState([]);
+  const [fromChats, setFromChats] = useState([]);
+  const [toChats, setToChats] = useState([]);
 
   useEffect(() => {
-    const carpoolDoc = db
-      .collection("carpool")
-      .doc(isRider ? otherUser.id : currentUid);
-    const chatDoc = carpoolDoc
+    const fromDocs = db
       .collection("chats")
-      .where("userId", "==", isRider ? currentUid : otherUser.id)
-      .orderBy("createdAt", "desc");
-
-    const observer = chatDoc.onSnapshot((onSnapshot) => {
+      .where("from", "==", currentUid)
+      .where("to", "==", otherUser.id);
+    const fromObserver = fromDocs.onSnapshot((onSnapshot) => {
       let tempArr = [];
       onSnapshot.docs.forEach((doc) => {
-        const data = doc.data();
-        tempArr.push({ id: doc.id, ...data });
+        tempArr.push({ id: doc.id, ...doc.data() });
       });
-      setChat(tempArr);
+      console.log(tempArr);
+      setFromChats(tempArr);
     });
+
+    const toDocs = db
+      .collection("chats")
+      .where("from", "==", otherUser.id)
+      .where("to", "==", currentUid);
+    const toObserver = toDocs.onSnapshot((onSnapshot) => {
+      let tempArr = [];
+      onSnapshot.docs.forEach((doc) => {
+        tempArr.push({ id: doc.id, ...doc.data() });
+      });
+      console.log(tempArr);
+      setToChats(tempArr);
+    });
+
     return () => {
-      observer();
+      fromObserver();
+      toObserver();
     };
   }, []);
 
-  const goBack = (params) => {
-    navigation.goBack();
-  };
+  useEffect(() => {
+    let tempArr = [...fromChats, ...toChats];
+    tempArr.sort((a, b) => b.createdAt - a.createdAt);
+    setChats(tempArr);
+  }, [fromChats, toChats]);
 
   const send = async () => {
-    const carpoolDoc = db
-      .collection("carpool")
-      .doc(isRider ? otherUser.id : currentUid);
+    const chatIds = currentUser.chats;
+    const countFilteredChatIds = chatIds.filter(
+      (id) => otherUser.id === id
+    ).length;
+    console.log(countFilteredChatIds);
 
-    if (isRider) {
-      const filteredRider = currentUser.carpoolers.filter(
-        (id) => id === otherUser.id
-      ).length;
-      if (filteredRider < 1) {
-        const userDoc = db.collection("users").doc(currentUid);
-        userDoc.update({ carpoolers: [otherUser.id] }, { merge: true });
-      }
+    if (countFilteredChatIds < 1) {
+      db.collection("users")
+        .doc(currentUid)
+        .update({ chats: [otherUser.id] }, { merge: true });
+
+      db.collection("users")
+        .doc(otherUser.id)
+        .update({ chats: [currentUid] }, { merge: true });
     }
 
-    if (chat.length < 1) {
-      const doc = await carpoolDoc.get();
-
-      carpoolDoc.update(
-        { riders: [isRider ? currentUid : otherUser.id] },
-        { merge: true }
-      );
-    }
-
-    carpoolDoc.collection("chats").add({
-      userId: currentUid,
-      text,
+    const chatDoc = db.collection("chats");
+    chatDoc.add({
+      from: currentUid,
+      to: otherUser.id,
+      message: text,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
+    setChats([
+      ...chats,
+      {
+        from: currentUid,
+        to: otherUser.id,
+        message: text,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      },
+    ]);
+
     setText("");
+  };
+
+  const goBack = (params) => {
+    navigation.goBack();
   };
 
   return (
@@ -157,7 +181,7 @@ export default function CarpoolChat(props) {
         ]}
       >
         {/* <Text>{otherUser.email}aaaaaaa</Text> */}
-        <Chat data={chat} currentUid={currentUid} />
+        <Chat data={chats} currentUid={currentUid} />
 
         <TouchableOpacity
           style={styles.textInputView}

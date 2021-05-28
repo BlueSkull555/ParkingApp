@@ -40,14 +40,14 @@ export default function FindARide(props) {
         style={[
           styles.container,
           {
-            alignSelf: item.userId === currentUid ? "flex-end" : "flex-start",
-            alignItems: item.userId === currentUid ? "flex-end" : "flex-start",
+            alignSelf: item.from === currentUid ? "flex-end" : "flex-start",
+            alignItems: item.from === currentUid ? "flex-end" : "flex-start",
           },
         ]}
       >
         <View style={[styles.outerView, styles.shadow]}>
           <View style={styles.mainTextView}>
-            <Text style={{ fontSize: 14 }}>{item.text}</Text>
+            <Text style={{ fontSize: 14 }}>{item.message}</Text>
           </View>
 
           {/* <View style={styles.timeView}>

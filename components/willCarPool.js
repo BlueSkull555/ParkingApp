@@ -31,116 +31,88 @@ import ChatList from "./chatList";
 const { width, height } = Dimensions.get("window");
 export default function CarPool(props) {
   const { currentUid, navigation, currentUser } = props;
-  const [riders, setRiders] = useState([]);
-  const [riderIds, setRiderIds] = useState([]);
-  const [lastMessages, setLastMessages] = useState([]);
-  const [ridersWithMessage, setRidersWithMessage] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [chats, setChats] = useState([]);
+  const [usersWithMessage, setUsersWithMessage] = useState([]);
+  const [fromChats, setFromChats] = useState([]);
+  const [toChats, setToChats] = useState([]);
 
-  const riderIdsRef = useRef([]);
-
-  // ------------------RIDER IDS------------------
-  // Get Rider Id's
   useEffect(() => {
-    const doc = db.collection("carpool").doc(currentUid);
-    const observer = doc.onSnapshot((doc) => {
-      console.log("doc exists?", doc.exists);
-      if (doc.exists) {
-        const data = doc.data();
-        console.log("data.riders", data.riders);
-        setRiderIds(data.riders);
-        riderIdsRef.current = data.riders;
-      }
-    });
-    return () => {
-      observer();
-    };
-  }, []);
-
-  // ------------------RIDERS------------------
-  // Get Rider Details through the profile
-  useEffect(() => {
-    if (riderIds.length > 0) {
-      const doc = db
+    const chatIds = currentUser.chats;
+    if (chatIds.length > 0) {
+      const userDoc = db
         .collection("users")
-        .where(firebase.firestore.FieldPath.documentId(), "in", riderIds);
-      const observer = doc.onSnapshot((onSnapshot) => {
+        .where(firebase.firestore.FieldPath.documentId(), "in", chatIds);
+
+      const observer = userDoc.onSnapshot((onSnapshot) => {
         let tempArr = [];
         onSnapshot.docs.forEach((doc) => {
-          const data = doc.data();
-          tempArr.push({ id: doc.id, ...data });
+          tempArr.push({ id: doc.id, ...doc.data() });
         });
-        // console.log("WHY ARE YU NOT GETTING SET?", tempArr);
-        setRiders([...tempArr]);
+        setUsers(tempArr);
       });
+
       return () => {
         observer();
       };
     }
-  }, [riderIds]);
+  }, []);
 
-  // ------------------CHATS------------------
-  // Get chats then get the last message for each rider
   useEffect(() => {
-    const doc = db.collection("carpool").doc(currentUid);
-
-    const chatsDoc = doc.collection("chats");
-    const observer = chatsDoc.onSnapshot((onSnapshot) => {
-      onSnapshot.docs.forEach((item) =>
-        console.log("FUCKIN BITCH", item.data())
-      );
-      if (!onSnapshot.empty) {
-        console.log("onSnapshot.empty", onSnapshot.empty);
-        let tempArr = [];
-        const ids = riderIdsRef.current;
-        console.log(ids);
-        if (ids.length > 0) {
-          // console.log("ARE WE IN THIS BITCH?", ids);
-          // console.log("ARE WE IN THIS BITCH?", lastMessages.doc);
-          ids.forEach((id) => {
-            let lastMessage = onSnapshot.docs.filter(
-              (doc) => doc.data().userId === id
-            );
-
-            lastMessage = lastMessage.sort(
-              (a, b) => b.data().createdAt - a.data().createdAt
-            );
-
-            // lastMessage.forEach((item) => console.log("fuuuuck", item));
-            // lastMessage = lastMessage.sort((a, b) => a.createdAt - b.createdAt);
-            // console.log(lastMessage[0].data());
-            // if (lastMessage && lastMessage[0] && lastMessage[0].data())
-            tempArr.push(lastMessage[0].data());
-          });
-        }
-        setLastMessages(tempArr);
-        // setRiders(tempArr);
-      }
+    const fromDocs = db.collection("chats").where("from", "==", currentUid);
+    const fromObserver = fromDocs.onSnapshot((onSnapshot) => {
+      let tempArr = [];
+      onSnapshot.docs.forEach((doc) => {
+        tempArr.push({ id: doc.id, ...doc.data() });
+      });
+      console.log(tempArr);
+      setFromChats(tempArr);
     });
+
+    const toDocs = db.collection("chats").where("to", "==", currentUid);
+    const toObserver = toDocs.onSnapshot((onSnapshot) => {
+      let tempArr = [];
+      onSnapshot.docs.forEach((doc) => {
+        tempArr.push({ id: doc.id, ...doc.data() });
+      });
+      console.log(tempArr);
+      setToChats(tempArr);
+    });
+
     return () => {
-      observer();
+      fromObserver();
+      toObserver();
     };
   }, []);
 
   useEffect(() => {
-    // console.log("LAST MESSAGO", lastMessages);
-    // console.log("RIDERS ASJKHDSADHHASFJSLKDASJ", riders);
-    if (riders.length > 0 && lastMessages.length > 0) {
-      // console.log("WE INSIDE THIS ASJKHDSADHHASFJSLKDASJ");
+    let tempArr = [...fromChats, ...toChats];
+    setChats(tempArr);
+  }, [fromChats, toChats]);
+
+  useEffect(() => {
+    console.log("HHEYOOO", users.length, chats.length);
+    console.log();
+    if (users.length > 0 && chats.length > 0) {
+      console.log("wtf");
       let tempArr = [];
-      riders.forEach((rider) => {
-        const lastMessage = lastMessages.filter(
-          (message) => message.userId === rider.id
-        )[0];
-        // console.log("LAST MESSAGO", lastMessage);
-        // console.log("riderino", rider);
-        const newRider = { lastMessage, ...rider };
-        // console.log("riderino", newRider);
-        tempArr.push(newRider);
+      users.forEach((user) => {
+        let lastMessage = chats.filter(
+          (chat) =>
+            (chat.from === user.id && chat.to === currentUid) ||
+            (chat.from === currentUid && chat.to === user.id)
+        );
+        lastMessage = lastMessage.sort((a, b) => b.createdAt - a.createdAt);
+        if (lastMessage.length > 0) {
+          tempArr.push({ ...user, lastMessage: lastMessage[0] });
+        } else {
+          tempArr.push({ ...user });
+        }
       });
-      // console.log("TEMPARINO", tempArr);
-      setRidersWithMessage(tempArr);
+      console.log(tempArr);
+      setUsersWithMessage(tempArr);
     }
-  }, [riders, lastMessages]);
+  }, [users, chats]);
 
   const goToChat = (item) => {
     console.log("hello");
@@ -196,9 +168,17 @@ export default function CarPool(props) {
         containerStyle={styles.header}
       />
       <View style={[styles.body]}>
-        <Text>Will Car Pool BRO</Text>
-        <Button title="Remove all carpool" onPress={removeAll} />
-        <ChatList users={ridersWithMessage} goToChat={goToChat} />
+        {/* <Text>Will Car Pool BRO</Text> */}
+        {/* <Button title="Remove all carpool" onPress={removeAll} /> */}
+        {usersWithMessage.length > 0 ? (
+          <ChatList users={usersWithMessage} goToChat={goToChat} />
+        ) : (
+          <View style={[styles.findButton]}>
+            <Text style={styles.buttonText}>
+              Waiting for users to request for a carpool
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

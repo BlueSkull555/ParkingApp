@@ -29,6 +29,7 @@ import Map from "./CarpoolMap";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import CarpoolFirstTime from "./carpoolFirstTime";
+import moment from "moment";
 
 const { width, height } = Dimensions.get("window");
 export default function FindARide(props) {
@@ -54,13 +55,13 @@ export default function FindARide(props) {
               {item.name}
             </Text>
             <Text style={styles.text} numberOfLines={1}>
-              12:14 PM
+              {moment(item.lastMessage.createdAt.toDate()).format("hh:mm A")}
             </Text>
           </View>
 
           <View style={styles.bottomRightView}>
             <Text style={styles.text} numberOfLines={2}>
-              {item.lastMessage.text}
+              {item.lastMessage.message}
             </Text>
             {/* <Text style={styles.text} numberOfLines={1}>
               Land Cruiser
