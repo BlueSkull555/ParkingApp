@@ -25,10 +25,10 @@ import * as Location from "expo-location";
 import { useRef } from "react";
 
 import Map from "./CarpoolMap";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import CarpoolFirstTime from "./carpoolFirstTime";
 import DriversList from "../components/driversList";
+import color from "../Color";
 
 const { width, height } = Dimensions.get("window");
 export default function FindARide(props) {
@@ -100,6 +100,7 @@ export default function FindARide(props) {
   return (
     <View style={styles.container}>
       <Header
+        backgroundColor={color.black.oliver}
         leftComponent={
           <View style={styles.headerIconView}>
             <TouchableOpacity

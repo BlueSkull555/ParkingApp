@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   Alert,
   Dimensions,
+  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 import db from "../db";
@@ -17,14 +18,13 @@ import { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { Icon, Switch, Header } from "react-native-elements";
-import colors from "../Colors";
+import colors from "../Color";
 
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
 import { useRef } from "react";
 
 import Map from "../components/CarpoolMap";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import CarpoolFirstTime from "./carpoolFirstTime";
 import WillCarPool from "./willCarPool";
@@ -132,7 +132,20 @@ export default function CarPool(props) {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        style={{
+          //flex: 1,
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: width,
+          height: height,
+          zIndex: -1,
+        }}
+        source={require("../assets/background/lightWave2.jpg")}
+      />
       <Header
+        backgroundColor={colors.black.oliver}
         leftComponent={{
           text: "Carpool",
           style: { color: colors.white, fontSize: 20 },
@@ -230,6 +243,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     top: "40%",
+    backgroundColor: colors.white,
   },
   buttonText: {
     textAlign: "center",

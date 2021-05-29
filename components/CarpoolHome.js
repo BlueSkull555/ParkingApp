@@ -11,6 +11,7 @@ import {
   Alert,
   Dimensions,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import db from "../db";
 import { useState, useEffect } from "react";
@@ -24,7 +25,6 @@ import * as Location from "expo-location";
 import { useRef } from "react";
 
 import Map from "../components/CarpoolMap";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import CarpoolFirstTime from "./carpoolFirstTime";
 import WillCarPool from "./willCarPool";
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
 
   header: {
     height: height * 0.1,
+    backgroundColor: colors.black.oliver,
   },
 
   headerIconView: {

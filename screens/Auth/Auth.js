@@ -41,7 +41,6 @@ import {
   responsiveScreenWidth,
 } from "react-native-responsive-dimensions";
 import Register from "./Register";
-import color from "color";
 const { width, height } = Dimensions.get("window");
 export default function Auth({ user, setUser }) {
   //--------------------(Button group)------------------------------------------

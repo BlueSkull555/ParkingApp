@@ -17,14 +17,13 @@ import { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { Icon, Switch } from "react-native-elements";
-import colors from "../Colors";
+import colors from "../Color";
 
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
 import { useRef } from "react";
 
 import Map from "./CarpoolMap";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import Header from "./header";
 
@@ -38,15 +37,15 @@ export default function CarPool(props) {
   const [hasCar, setHasCar] = useState(undefined);
 
   const save = () => {
-    const doc = db.collection("users").doc(currentUid);
-    doc.update({ willCarPool: hasCar });
-
-    const carpoolDoc = db.collection("carpool").doc(currentUid);
-    const chatDoc = carpoolDoc.collection("chat");
-    // enabled, disabled, full
-    carpoolDoc.set({ status: "enabled", riders: [] });
-
-    navigation.goBack();
+    if (hasCar !== undefined) {
+      const doc = db.collection("users").doc(currentUid);
+      doc.update({ willCarPool: hasCar });
+      //const carpoolDoc = db.collection("carpool").doc(currentUid);
+      //const chatDoc = carpoolDoc.collection("chat");
+      // enabled, disabled, full
+      //carpoolDoc.set({ status: "enabled", riders: [] });
+      navigation.goBack();
+    }
   };
 
   const goToMap = () => {
@@ -56,7 +55,7 @@ export default function CarPool(props) {
   return (
     <View style={styles.container}>
       <Header
-        style={{ backgroundColor: "gray" }}
+        style={{ backgroundColor: colors.black.oliver }}
         navigation={navigation}
       ></Header>
       {/* ---------------LOCATION--------------- */}
@@ -127,11 +126,11 @@ export default function CarPool(props) {
             backgroundColor:
               houseLocation === undefined || hasCar === undefined
                 ? colors.gray.light
-                : colors.red.light,
+                : colors.validation.succes,
           },
         ]}
         onPress={save}
-        disabled={houseLocation === undefined && hasCar === undefined}
+        disabled={hasCar === undefined || houseLocation === undefined}
       >
         <Text style={[styles.buttonText]}>Save</Text>
       </TouchableOpacity>

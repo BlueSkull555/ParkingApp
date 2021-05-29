@@ -38,7 +38,7 @@ import {
   responsiveScreenWidth,
 } from "react-native-responsive-dimensions";
 import { TouchableOpacity } from "react-native";
-import Color, { black } from "../../Color";
+import Color from "../../Color";
 
 export default function Register({ user, setUser }) {
   //--------------------(database variable)------------------------------------------
@@ -93,6 +93,7 @@ export default function Register({ user, setUser }) {
             gender,
             role: "user",
             car: { brand, plateNo, model },
+            chats: [],
           });
         })
         .catch((error) => {
@@ -128,6 +129,7 @@ export default function Register({ user, setUser }) {
             gender,
             role: "user",
             car: null,
+            chats: [],
           });
         })
         .catch((error) => {

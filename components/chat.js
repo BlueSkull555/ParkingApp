@@ -26,7 +26,6 @@ import * as Location from "expo-location";
 import { useRef } from "react";
 
 import Map from "./CarpoolMap";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import CarpoolFirstTime from "./carpoolFirstTime";
 

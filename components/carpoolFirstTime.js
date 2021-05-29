@@ -11,6 +11,7 @@ import {
   Alert,
   Dimensions,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import db from "../db";
 import { useState, useEffect } from "react";
@@ -24,7 +25,6 @@ import * as Location from "expo-location";
 import { useRef } from "react";
 
 import Map from "./CarpoolMap";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const { width, height } = Dimensions.get("window");
 export default function CarPool(props) {
@@ -43,6 +43,18 @@ export default function CarPool(props) {
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        style={{
+          //flex: 1,
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: width,
+          height: height,
+          zIndex: -1,
+        }}
+        source={require("../assets/background/lightWave2.jpg")}
+      />
       <Text style={[styles.titleText]}>Welcome to Carpool</Text>
 
       {/* ---------------LOCATION--------------- */}
@@ -59,9 +71,7 @@ export default function CarPool(props) {
         ]}
         onPress={goToMap}
       >
-        <Text style={[styles.buttonText, { color: colors.black.dark }]}>
-          Set Location
-        </Text>
+        <Text style={styles.buttonText}>Set Location</Text>
       </TouchableOpacity>
 
       {/* ---------------CARPOOL OPTIONS--------------- */}
@@ -119,7 +129,7 @@ export default function CarPool(props) {
           },
         ]}
         onPress={save}
-        disabled={houseLocation === undefined && hasCar === undefined}
+        disabled={houseLocation === undefined || hasCar === undefined}
       >
         <Text style={[styles.buttonText]}>Save</Text>
       </TouchableOpacity>

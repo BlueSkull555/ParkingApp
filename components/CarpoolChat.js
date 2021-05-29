@@ -15,6 +15,7 @@ import {
   Pressable,
   Keyboard,
   Platform,
+  ImageBackground,
   KeyboardAvoidingView,
 } from "react-native";
 import Constants from "expo-constants";
@@ -23,7 +24,7 @@ import { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { Icon, Switch, Header } from "react-native-elements";
-import colors from "../Colors";
+import colors from "../Color";
 
 import { useKeyboard } from "@react-native-community/hooks";
 
@@ -35,6 +36,7 @@ import Map from "../components/CarpoolMap";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import Chat from "./chat";
+import color from "color";
 
 const { width, height } = Dimensions.get("window");
 export default function CarpoolChat(props) {
@@ -135,6 +137,18 @@ export default function CarpoolChat(props) {
       onPress={Keyboard.dismiss}
       android_disableSound
     >
+      <ImageBackground
+        style={{
+          //flex: 1,
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: width,
+          height: height,
+          zIndex: -1,
+        }}
+        source={require("../assets/background/lightWave2.jpg")}
+      />
       <StatusBar
         // animated={true}
         backgroundColor="black"
@@ -149,7 +163,7 @@ export default function CarpoolChat(props) {
           <Icon
             name="arrow-left"
             type="font-awesome-5"
-            color={colors.black.dark}
+            color={colors.white}
             size={22}
           />
         </TouchableOpacity>
@@ -194,7 +208,15 @@ export default function CarpoolChat(props) {
             onChangeText={setText}
             // onFocus={() => setContainerSize(keyboard.keyboardHeight)}
           />
-          <View style={styles.iconView}>
+          <View
+            style={[
+              styles.iconView,
+              {
+                backgroundColor:
+                  text === "" ? colors.gray.light : colors.black.oliver,
+              },
+            ]}
+          >
             <Icon name="send" type="ionicons" color={"white"} size={18} />
           </View>
         </TouchableOpacity>
@@ -223,6 +245,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     borderBottomWidth: 1,
     marginTop: Constants.statusBarHeight,
+    backgroundColor: colors.black.oliver,
   },
 
   headerTitle: {
@@ -237,6 +260,7 @@ const styles = StyleSheet.create({
   headerTitleText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: colors.white,
   },
 
   backIcon: {
@@ -247,6 +271,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginRight: "5%",
+    color: colors.white,
   },
 
   avatar: {
@@ -306,7 +331,7 @@ const styles = StyleSheet.create({
     // width: "10%",
     height: "100%",
     aspectRatio: 1,
-    backgroundColor: "lightblue",
+
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",

@@ -6,25 +6,29 @@ import {
   View,
   ScrollView,
   TextInput,
-  SafeAreaView,
   Alert,
   TouchableOpacity,
   StatusBar,
+  SafeAreaView,
+  Dimensions,
+  ImageBackground,
 } from "react-native";
 import db from "../db";
+//import Header from "../components/header";
 import {
   Text,
   Button,
   Overlay,
-  Header,
   SearchBar,
   Icon,
+  Header,
   Divider,
 } from "react-native-elements";
 import firebase from "firebase/app";
 import "firebase/auth";
 import moment from "moment";
-import color from "color";
+
+const { width, height } = Dimensions.get("window");
 
 export default function Booking() {
   //--------------------(General variable)------------------------------------------
@@ -146,7 +150,32 @@ export default function Booking() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ImageBackground
+        style={styles.backgroundImage}
+        source={require("../assets/background/lightWave2.jpg")}
+      />
+      {/* <Header style={{ backgroundColor: Color.black.oliver }}>
+        <View style={{ flexDirection: "row" }}>
+          <SearchBar
+            lightTheme
+            containerStyle={{
+              backgroundColor: "transparent",
+              borderTopWidth: 0,
+              borderBottomWidth: 0,
+              width: "100%",
+            }}
+            placeholder="Parking Number"
+            onChangeText={(text) => {
+              setSearch(text), handleSearch(text);
+            }}
+            value={search}
+          />
+        </View>
+      </Header> */}
       <Header
+        elevated
+        barStyle={"light-content"}
+        statusBarProps={{ backgroundColor: Color.black.oliver }}
         placement="left"
         containerStyle={styles.Header}
         leftContainerStyle={styles.leftComponent}
@@ -156,7 +185,7 @@ export default function Booking() {
             <Icon
               type="material-community"
               name="arrow-left"
-              color="#fff"
+              color={Color.white}
               onPress={() => setView("")}
               size={40}
             />
@@ -165,11 +194,16 @@ export default function Booking() {
         centerComponent={
           <SearchBar
             lightTheme
+            inputContainerStyle={{
+              height: "100%",
+              backgroundColor: Color.white,
+            }}
             containerStyle={{
               backgroundColor: "transparent",
               borderTopWidth: 0,
               borderBottomWidth: 0,
               width: "100%",
+              paddingTop: -10,
             }}
             placeholder="Parking Number"
             onChangeText={(text) => {
@@ -193,12 +227,7 @@ export default function Booking() {
           />
         }
       />
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="#403D39"
-        translucent={true}
-      />
+
       {view == "1" ? (
         <ScrollView style={styles.ScrollView}>
           <View
@@ -233,6 +262,7 @@ export default function Booking() {
                       borderColor: Color.gray.light,
                       padding: 2,
                       margin: 5,
+                      backgroundColor: Color.white,
                     }}
                   >
                     {parkings.filter((pa) => pa.id == item.parkingId) ? (
@@ -457,7 +487,7 @@ export default function Booking() {
               }}
             >
               <Text style={{ padding: 5 }}>
-                Note: you have until {moment().add(30, "minute").format("LTS")}
+                Note: you have until {moment().add(30, "minute").format("LTS")}{" "}
                 before the reservation expire
               </Text>
               {loadingButton ? (
@@ -475,15 +505,18 @@ export default function Booking() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#FFFCF2",
+    //flex: 1,
+    height: height,
+    width: width,
   },
   ScrollView: {},
   Header: {
-    justifyContent: "space-around",
+    justifyContent: "flex-start",
     alignContent: "center",
-    backgroundColor: "#403D39",
+    backgroundColor: Color.black.oliver,
     alignSelf: "flex-start",
+    width: width,
+    height: height * 0.1,
   },
   leftComponent: {
     justifyContent: "center",
@@ -496,7 +529,7 @@ const styles = StyleSheet.create({
   OverlayContainer: {
     width: "80%",
     height: "50%",
-    backgroundColor: "#FFFCF2",
+    backgroundColor: Color.white,
   },
   parkingsContainer: {
     textAlign: "center",
@@ -506,6 +539,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     padding: 5,
+    backgroundColor: Color.white,
   },
   parkingText: {
     textAlign: "center",
@@ -514,5 +548,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     flex: 1,
+  },
+  backgroundImage: {
+    //flex: 1,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    width: width,
+    height: height,
+    zIndex: -1,
   },
 });

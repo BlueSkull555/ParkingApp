@@ -21,16 +21,15 @@ import { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { Icon, Switch, Header } from "react-native-elements";
-import colors from "../Colors";
 
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
 import { useRef } from "react";
 
 import Map from "../components/CarpoolMap";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 import Chat from "./chat";
+import Colors from "../Colors";
 
 const { width, height } = Dimensions.get("window");
 export default function CarpoolChat(props) {
@@ -50,7 +49,7 @@ export default function CarpoolChat(props) {
       />
       {props.children}
 
-      <TouchableOpacity style={styles.backIcon} onPress={goBack}>
+      {/* <TouchableOpacity style={styles.backIcon} onPress={goBack}>
         <Icon
           name="arrow-left"
           type="font-awesome-5"
@@ -60,7 +59,7 @@ export default function CarpoolChat(props) {
       </TouchableOpacity>
       <View style={styles.center} onPress={goBack}>
         <Text style={styles.title}>Settings</Text>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
   container: {
     height: height * 0.1 - Constants.statusBarHeight,
     width: "100%",
-    backgroundColor: "white",
+    backgroundColor: Colors.black.oliver,
     flexDirection: "row",
     // alignItems: "center",
     justifyContent: "center",
