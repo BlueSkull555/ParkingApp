@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, LogBox } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import Auth from "./screens/Auth/Auth";
@@ -11,6 +11,9 @@ import Settings from "./screens/Settings";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { useState, useEffect } from "react";
+
+
+LogBox.ignoreAllLogs();
 
 const Tab = createBottomTabNavigator();
 
