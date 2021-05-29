@@ -58,7 +58,7 @@ export default function CarpoolChat(props) {
       onSnapshot.docs.forEach((doc) => {
         tempArr.push({ id: doc.id, ...doc.data() });
       });
-      console.log(tempArr);
+      // console.log(tempArr);
       setFromChats(tempArr);
     });
 
@@ -71,7 +71,7 @@ export default function CarpoolChat(props) {
       onSnapshot.docs.forEach((doc) => {
         tempArr.push({ id: doc.id, ...doc.data() });
       });
-      console.log(tempArr);
+      // console.log(tempArr);
       setToChats(tempArr);
     });
 
@@ -92,7 +92,7 @@ export default function CarpoolChat(props) {
     const countFilteredChatIds = chatIds.filter(
       (id) => otherUser.id === id
     ).length;
-    console.log(countFilteredChatIds);
+    // console.log(countFilteredChatIds);
 
     if (countFilteredChatIds < 1) {
       db.collection("users")

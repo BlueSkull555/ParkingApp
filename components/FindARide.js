@@ -48,16 +48,16 @@ export default function FindARide(props) {
           data.location.latitude,
           data.location.longitude
         );
-        console.log(
-          "distance",
-          currentUser.location.latitude,
-          currentUser.location.longitude,
-          data.location.latitude,
-          data.location.longitude
-        );
+        // console.log(
+        //   "distance",
+        //   currentUser.location.latitude,
+        //   currentUser.location.longitude,
+        //   data.location.latitude,
+        //   data.location.longitude
+        // );
         tempArr.push({ id: user.id, ...data, distance });
       });
-      console.log(tempArr);
+      // console.log(tempArr);
       setUsers(tempArr);
     });
     return () => {
@@ -90,7 +90,6 @@ export default function FindARide(props) {
   };
 
   const goToChat = (item) => {
-    console.log("hello");
     navigation.navigate("Chat", {
       otherUser: item,
       currentUser,

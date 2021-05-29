@@ -43,7 +43,7 @@ export default function CarPool(props) {
     const doc = db.collection("users").doc(currentUid);
     const observer = doc.onSnapshot((doc) => {
       const user = doc.data();
-      console.log("data", user.location);
+      // console.log("data", user.location);
       setCurrentUser(user);
       setHouseLocation(user.location);
       setWillCarPool(user.willCarPool);

@@ -67,7 +67,7 @@ export default function CarPool(props) {
       onSnapshot.docs.forEach((doc) => {
         tempArr.push({ id: doc.id, ...doc.data() });
       });
-      console.log(tempArr);
+      // console.log(tempArr);
       setFromChats(tempArr);
     });
 
@@ -77,7 +77,7 @@ export default function CarPool(props) {
       onSnapshot.docs.forEach((doc) => {
         tempArr.push({ id: doc.id, ...doc.data() });
       });
-      console.log(tempArr);
+      // console.log(tempArr);
       setToChats(tempArr);
     });
 
@@ -93,10 +93,7 @@ export default function CarPool(props) {
   }, [fromChats, toChats]);
 
   useEffect(() => {
-    console.log("HHEYOOO", users.length, chats.length);
-    console.log();
     if (users.length > 0 && chats.length > 0) {
-      console.log("wtf");
       let tempArr = [];
       users.forEach((user) => {
         let lastMessage = chats.filter(
@@ -111,13 +108,12 @@ export default function CarPool(props) {
           tempArr.push({ ...user });
         }
       });
-      console.log(tempArr);
+      // console.log(tempArr);
       setUsersWithMessage(tempArr);
     }
   }, [users, chats]);
 
   const goToChat = (item) => {
-    console.log("hello");
     navigation.navigate("Chat", {
       currentUser,
       currentUid,
