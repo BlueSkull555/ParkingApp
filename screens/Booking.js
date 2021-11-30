@@ -23,6 +23,7 @@ import {
   Icon,
   Header,
   Divider,
+  Tooltip,
 } from "react-native-elements";
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -43,6 +44,56 @@ export default function Booking() {
   const [view, setView] = useState("");
   const [details, setDetails] = useState("");
   const [search, setSearch] = useState("");
+  const [prediction, setPrediction] = useState("Loading");
+
+  //---------------------------------------------------------------------------------
+  //--------------------(Machine Learning Predictions)--------------------------------------
+  useEffect(() => {
+    getPrediction();
+  }, []);
+
+  const getPrediction = async () => {
+    const dateNow = moment();
+    const hourNow = dateNow.format("HH");
+    let dayNow = dateNow.day();
+
+    if (dayNow > 4 || parseInt(hourNow) < 7 || parseInt(hourNow) > 20) {
+      setPrediction("N/A");
+      return;
+    }
+    dayNow = dateNow.day() + 1 > 6 ? 0 : dateNow.day() + 1;
+
+    // const url = "http://192.168.0.17:3000";
+    const url = "https://parkingappbackend.herokuapp.com/";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        day: dayNow,
+        hour: hourNow,
+      }),
+    });
+    if (response.ok) {
+      const occupied = await response.json();
+      const available = 300 - occupied;
+      const range = 25;
+      const minPred = available - range < 0 ? 0 : available - range;
+      const maxPred =
+        available + range > 300
+          ? 300
+          : available + range < 0
+          ? 25
+          : available + range;
+      setPrediction(`${minPred} - ${maxPred}`);
+    } else {
+      Alert.alert("Error", "Unable to get estimate parking spots", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+    }
+  };
 
   //---------------------------------------------------------------------------------
   //--------------------(Snapshot for parkings)--------------------------------------
@@ -227,6 +278,50 @@ export default function Booking() {
           />
         }
       />
+
+      <View
+        style={{
+          width: "90%",
+          height: height * 0.1,
+          borderWidth: 1,
+          backgroundColor: Color.white,
+        }}
+      >
+        <View
+          style={{
+            position: "absolute",
+            top: height * 0.005,
+            right: width * 0.01,
+            zIndex: 100,
+          }}
+        >
+          <Tooltip
+            popover={
+              <Text style={{ color: "white" }}>
+                Estimated parking spots will only show during weekdays from 7AM
+                to 8PM
+              </Text>
+            }
+            width={width * 0.8}
+            backgroundColor={Color.black.oliver}
+          >
+            <Icon name="infocirlceo" type="antdesign" color="black" size={16} />
+          </Tooltip>
+        </View>
+        <Text style={{ fontSize: 16, marginLeft: width * 0.02 }}>
+          Estimated Available Parking Spots
+        </Text>
+        <View
+          style={{
+            // borderWidth: 1,
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 24, fontWeight: "bold" }}>{prediction}</Text>
+        </View>
+      </View>
 
       {view == "1" ? (
         <ScrollView style={styles.ScrollView}>
@@ -508,8 +603,11 @@ const styles = StyleSheet.create({
     //flex: 1,
     height: height,
     width: width,
+    alignItems: "center",
   },
-  ScrollView: {},
+  ScrollView: {
+    height: height * 0.8,
+  },
   Header: {
     justifyContent: "flex-start",
     alignContent: "center",
