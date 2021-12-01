@@ -60,11 +60,7 @@ export default function Register({ user, setUser }) {
   const [plateNo, onChangePlateNo] = useState(null);
   //--------------------(Handle register)------------------------------------------
   const handleRegister = () => {
-    if (
-      !(email || password || name || age || phone || collegeId || gender) ||
-      haveCar === true ||
-      haveCar === null
-    ) {
+    if (!(email || password || name || age || phone || collegeId || gender)) {
       Alert.alert("Please fill all inputs");
       console.log(email, password, name, age, phone, collegeId, gender);
     } else if (

@@ -59,9 +59,9 @@ export default function FindARide(props) {
           </View>
 
           <View style={styles.bottomRightView}>
-            <Text style={styles.text} numberOfLines={1}>
+            {/* <Text style={styles.text} numberOfLines={1}>
               {item.location.route}
-            </Text>
+            </Text> */}
             <Text style={styles.text} numberOfLines={1}>
               Land Cruiser
             </Text>

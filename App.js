@@ -63,7 +63,7 @@ export default function App() {
             ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Profile"
           component={Profile}
           options={{
@@ -77,7 +77,7 @@ export default function App() {
               />
             ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name="Settings"
           component={Settings}

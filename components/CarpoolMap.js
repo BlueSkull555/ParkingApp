@@ -57,26 +57,30 @@ export default function CarPool(props) {
 
   const onRegionChangeComplete = async (event) => {
     console.log(event);
-    const request = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?key=${GOOGLE_MAPS_APIKEY}&latlng=${event.latitude},${event.longitude}`
-    );
+    // const request = await fetch(
+    //   `https://maps.googleapis.com/maps/api/geocode/json?key=${GOOGLE_MAPS_APIKEY}&latlng=${event.latitude},${event.longitude}`
+    // );
 
-    const json = await request.json();
-    const result = json.results[0];
-    const address_components = result.address_components;
-    let route = address_components.filter((item) =>
-      item.types.includes("route")
-    );
-    if (route.length > 0) route = route[0].long_name;
+    // const json = await request.json();
+    // const result = json.results[0];
+    // const address_components = result.address_components;
+    // let route = address_components.filter((item) =>
+    //   item.types.includes("route")
+    // );
+    // if (route.length > 0) route = route[0].long_name;
 
     setSelectedLocation({
-      place_id: result.place_id,
-      formatted_address: result.formatted_address,
-      route: route !== [] ? route : "",
+      // place_id: result.place_id,
+      // formatted_address: result.formatted_address,
+      // route: route !== [] ? route : "",
       latitude: event.latitude,
       longitude: event.longitude,
     });
   };
+
+  // const onRegionChange = (event) => {
+  //   console.log(event);
+  // };
 
   const save = () => {
     // mapRef.current.animateCamera({
@@ -106,6 +110,7 @@ export default function CarPool(props) {
           }}
           ref={mapRef}
           onRegionChangeComplete={onRegionChangeComplete}
+          // onRegionChange={onRegionChange}
           showsUserLocation
         />
         <View style={[styles.iconView]}>

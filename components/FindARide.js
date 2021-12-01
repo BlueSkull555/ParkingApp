@@ -42,20 +42,22 @@ export default function FindARide(props) {
       let tempArr = [];
       snapshot.docs.map((user) => {
         const data = user.data();
-        const distance = getDistanceInM(
-          currentUser.location.latitude,
-          currentUser.location.longitude,
-          data.location.latitude,
-          data.location.longitude
-        );
-        // console.log(
-        //   "distance",
-        //   currentUser.location.latitude,
-        //   currentUser.location.longitude,
-        //   data.location.latitude,
-        //   data.location.longitude
-        // );
-        tempArr.push({ id: user.id, ...data, distance });
+        if (data.location) {
+          const distance = getDistanceInM(
+            currentUser.location.latitude,
+            currentUser.location.longitude,
+            data.location.latitude,
+            data.location.longitude
+          );
+          // console.log(
+          //   "distance",
+          //   currentUser.location.latitude,
+          //   currentUser.location.longitude,
+          //   data.location.latitude,
+          //   data.location.longitude
+          // );
+          tempArr.push({ id: user.id, ...data, distance });
+        }
       });
       // console.log(tempArr);
       setUsers(tempArr);
