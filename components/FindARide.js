@@ -59,6 +59,7 @@ export default function FindARide(props) {
           tempArr.push({ id: user.id, ...data, distance });
         }
       });
+      tempArr = tempArr.sort((a, b) => a.distance - b.distance);
       // console.log(tempArr);
       setUsers(tempArr);
     });

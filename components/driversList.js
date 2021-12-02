@@ -63,7 +63,9 @@ export default function FindARide(props) {
               {item.location.route}
             </Text> */}
             <Text style={styles.text} numberOfLines={1}>
-              Land Cruiser
+              {item.car && item.car.brand && item.car.model
+                ? `${item.car.brand} ${item.car.model}`
+                : ""}
             </Text>
           </View>
         </View>

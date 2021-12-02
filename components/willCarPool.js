@@ -57,7 +57,7 @@ export default function CarPool(props) {
         observer();
       };
     }
-  }, []);
+  }, [currentUser]);
 
   useEffect(() => {
     const fromDocs = db.collection("chats").where("from", "==", currentUid);

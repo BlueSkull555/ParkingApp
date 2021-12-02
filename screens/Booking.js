@@ -64,7 +64,7 @@ export default function Booking() {
     dayNow = dateNow.day() + 1 > 6 ? 0 : dateNow.day() + 1;
 
     // const url = "http://192.168.0.17:3000";
-    const url = "https://parkingappbackend.herokuapp.com/";
+    const url = "https://salty-beach-47631.herokuapp.com/";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -89,6 +89,7 @@ export default function Booking() {
           : available + range;
       setPrediction(`${minPred} - ${maxPred}`);
     } else {
+      setPrediction("N/A");
       Alert.alert("Error", "Unable to get estimate parking spots", [
         { text: "OK", onPress: () => console.log("OK Pressed") },
       ]);
